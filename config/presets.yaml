@@ -1,0 +1,48 @@
+# ============================================================
+# 课评自动填写 — 情绪→选项分布配置
+# 定义了不同情绪下每种题型的选择权重分布
+# 通常不需要修改此文件
+# ============================================================
+
+distributions:
+  # --- 正向评分 (Likert 1-5) ---
+  forward:
+    like:
+      weights: [0.0, 0.0, 0.1, 0.4, 0.5]    # 索引 0=最差, 4=最好; 一般≤2题
+      description: "mostly very positive, at most 2 neutral"
+    neutral:
+      weights: [0.05, 0.1, 0.7, 0.1, 0.05]
+      description: "mostly neutral, at most 1 negative"
+    dislike:
+      weights: [0.3, 0.5, 0.2, 0.0, 0.0]
+      description: "mostly negative, some neutral"
+
+  # --- 反向评分 (反向 Likert) ---
+  reverse:
+    like:
+      weights: [0.3, 0.5, 0.2, 0.0, 0.0]    # 最差选项 = 同意（反向）
+      description: "mostly agree (inverted)"
+    neutral:
+      weights: [0.05, 0.1, 0.7, 0.1, 0.05]
+      description: "mostly neutral"
+    dislike:
+      weights: [0.0, 0.0, 0.2, 0.5, 0.3]
+      description: "mostly disagree (inverted)"
+
+  # --- 是/否 ---
+  yesno:
+    like:
+      weights: [0.8, 0.2]    # [是, 否]
+      description: "mostly yes"
+    neutral:
+      weights: [0.5, 0.5]
+      description: "balanced"
+    dislike:
+      weights: [0.2, 0.8]
+      description: "mostly no"
+
+  # --- 文本填写触发率 ---
+  textfill:
+    like: 0.3      # 30% 的文本填写题实际填充文本
+    neutral: 0.6
+    dislike: 0.3

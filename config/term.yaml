@@ -1,0 +1,67 @@
+# ============================================================
+# 课评自动填写 — 学期配置文件
+# 每学期只需修改 semester 字段，其他字段通常不需要改动
+# ============================================================
+
+# === 每学期必改 ===
+semester: "2025-2026-2"        # ⬅ 修改此处为新学期
+
+# === 系统基础 URL（通常不需要改） ===
+app_base_url: "https://ce.fudan.edu.cn/index.html?v=3.41.0"
+evaluation_route: "#/my-task/details/UnFinished/0/1/Final/undefined/4"
+
+# === DOM 选择器（页面结构变化时才需要改） ===
+# 留空表示自动检测，配置了但匹配不上会自动降级
+selectors:
+  course_list_container: ""             # 自动检测课程列表
+  question_container: ""                # 自动检测题目容器
+  radio_group: 'input[type="radio"]'
+
+# === 操作行为 ===
+behavior:
+  confirm_before_submit: true    # 保险模式：提交前确认（默认 true）
+
+# === 正向评分默认行为 ===
+default_presets:
+  forward_scale_size: 5
+  neutral_allowed_under_like: [4]
+  max_negative_under_neutral: 1
+
+# === 课程列表与自定义覆盖 ===
+# 课程名用于匹配页面上的课程名称（模糊匹配）
+# overrides 按题目标题匹配，可覆盖自动检测的结果
+courses: []
+  # 示例：
+  # - name: "高等数学A（下）"
+  #   overrides:
+  #     "教师教学态度":
+  #       type: "reverse"      # 覆盖自动检测：forward/reverse/yesno
+  #     "课程总体评价":
+  #       force: "positive"    # 强制选最高分
+  #     "不必要的题目":
+  #       skip: true           # 跳过此题
+
+  # - name: "大学物理B"
+  #   overrides: {}
+
+# === AI 模块配置（可选，默认关闭） ===
+ai:
+  enabled: false
+  provider: "claude"                              # claude | openai
+  model: "claude-haiku-4-5-20251001"
+  api_key_env: "ANTHROPIC_API_KEY"                # 从环境变量读取 API Key
+  # base_url: null                                # 可选：自定义 API 端点
+  opinionated: false                              # AI 是否干预选项分布
+
+# === 文本填写预设（用于无 AI 时的固定模板） ===
+text_presets:
+  like:
+    - "老师教学认真负责，讲解清晰，受益匪浅。"
+    - "课程内容丰富，课堂氛围好，收获很大。"
+    - "老师耐心解答问题，课程安排合理。"
+  neutral:
+    - "课程内容中规中矩，教学方式可以更丰富一些。"
+    - "老师教学态度一般，课程难度适中。"
+  dislike:
+    - "教学方式有待改进，课堂互动较少。"
+    - "课程难度较大，讲解不够清晰，希望加强。"

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+data/storage_state.json
+data/session_cache.json
+data/screenshots/
+.claude/
+src/kepin.egg-info/

@@ -1,0 +1,13 @@
+[project]
+name = "kepin"
+version = "1.0.0"
+description = "复旦大学课评自动填写脚本"
+requires-python = ">=3.10"
+dependencies = [
+    "playwright>=1.40.0",
+    "pyyaml>=6.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+ai = ["anthropic>=0.30.0", "openai>=1.0.0"]
