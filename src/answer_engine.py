@@ -114,7 +114,7 @@ def generate_selections(
 
         # --- Checkbox questions: multi-select ---
         if q.detected_type == QuestionType.CHECKBOX:
-            _generate_checkbox_selections(q, sentiment, selections)
+            _generate_checkbox_selections(q, sentiment, selections, presets, term)
             continue
 
         # Determine distribution key
@@ -194,33 +194,34 @@ def _generate_checkbox_selections(
     q: Question,
     sentiment: Sentiment,
     selections: list[Selection],
+    presets: PresetsConfig | None = None,
+    term: TermConfig | None = None,
 ) -> None:
-    """Generate multi-select choices for checkbox questions.
-
-    Checkbox options don't have a clear polarity, so we use random sampling:
-    - Like: fewer selections (含蓄好评)
-    - Neutral: moderate selections
-    - Dislike: more selections (含蓄差评)
-    """
+    """Generate multi-select choices for checkbox questions."""
     n = len(q.options)
     if n == 0:
         return
 
     if sentiment == Sentiment.LIKE:
-        # Pick 1-3 options probabilistically
         probs = [0.3] * n
     elif sentiment == Sentiment.DISLIKE:
-        # Pick most options
         probs = [0.7] * n
     else:
-        # Neutral: pick about half
         probs = [0.5] * n
 
     for i in range(n):
         if random.random() < probs[i]:
+            text = None
+            if q.options[i].has_text_input and presets and term:
+                rate = getattr(presets.distributions.textfill, sentiment.value)
+                if random.random() < rate:
+                    preset_list = term.text_presets.get(sentiment.value, [])
+                    if preset_list:
+                        text = random.choice(preset_list)
             selections.append(Selection(
                 question_index=q.index,
                 option_index=i,
+                text=text,
             ))
 
     # Ensure at least one selection

@@ -80,6 +80,7 @@ def detect_questions(page: Page, term: TermConfig, verbose: bool = False) -> lis
             )
             for i, opt in enumerate(data["options"])
         ]
+        has_textfill = any(o.has_text_input for o in options)
         questions.append(Question(
             index=q_index,
             title=data.get("title", "未知题目"),
@@ -87,7 +88,7 @@ def detect_questions(page: Page, term: TermConfig, verbose: bool = False) -> lis
             detected_type=QuestionType.CHECKBOX,
             is_reverse=False,
             is_yesno=False,
-            has_textfill=False,
+            has_textfill=has_textfill,
         ))
         q_index += 1
 

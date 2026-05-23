@@ -990,9 +990,10 @@ def extract_checkbox_questions(page: Page) -> list[dict]:
                     if (!label || label.length > 100) {
                         label = cb.getAttribute('value') || ('选项' + (idx + 1));
                     }
+                    const needs_text = /(?:其它|其他|请注明|请说明|请填写|other|specify)/i.test(label);
                     return {
                         label: label,
-                        has_text_input: false,
+                        has_text_input: needs_text,
                     };
                 });
 

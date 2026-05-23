@@ -2,15 +2,16 @@ import time
 
 from playwright.sync_api import Page, Locator
 
+from .models import Selection, Question
 from .dom_utils import get_radio_groups, get_checkbox_groups, find_associated_text_input
 
 
 def fill_form(
     page: Page,
-    selections: list,
+    selections: list[Selection],
     fallback_text: str | None = None,
     sentiment: str | None = None,
-    questions: list | None = None,
+    questions: list[Question] | None = None,
 ) -> None:
     """Fill the evaluation form based on generated selections.
 
@@ -116,6 +117,22 @@ def fill_form(
             try:
                 if not target_cb.is_checked():
                     target_cb.check()
+                    time.sleep(0.15)
+
+                # Check for conditional text input (e.g. "其它 Others" option)
+                text_input = find_associated_text_input(page, target_cb)
+                if text_input:
+                    if sentiment in ("neutral", "dislike"):
+                        print(f"\n  ⚠ checkbox 题目 {sel.question_index} 选项需要填写内容")
+                        user_text = input("  请输入内容: ").strip()
+                        if user_text:
+                            text_input.fill(user_text)
+                    else:
+                        fill_value = sel.text or fallback_text
+                        if fill_value:
+                            text_input.fill(fill_value)
+                        else:
+                            print(f"  [WARN] checkbox 题目 {sel.question_index} 选项 {sel.option_index} 需要填写内容，但无预设文本")
             except Exception as e:
                 print(f"  [WARN] 勾选checkbox题目 {sel.question_index} 选项 {sel.option_index} 失败: {e}")
 
