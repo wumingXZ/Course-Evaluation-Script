@@ -18,7 +18,6 @@ def generate_selections(
     presets: PresetsConfig,
     term: TermConfig,
     course: CourseConfig | None = None,
-    ai_writer=None,  # Optional AIWriter for personalized text
 ) -> list[Selection]:
     selections: list[Selection] = []
     negative_count = 0
@@ -178,22 +177,9 @@ def generate_selections(
         if q.has_textfill and q.options and chosen < len(q.options):
             rate = getattr(presets.distributions.textfill, sentiment.value)
             if random.random() < rate:
-                if ai_writer:
-                    try:
-                        text = ai_writer.generate_fill_text(
-                            course_name=course.name if course else "",
-                            question_title=q.title,
-                            sentiment=sentiment,
-                        )
-                    except Exception as e:
-                        print(f"  [WARN] AI 文本生成失败: {e}，使用固定预设")
-                        preset_list = term.text_presets.get(sentiment.value, [])
-                        if preset_list:
-                            text = random.choice(preset_list)
-                else:
-                    preset_list = term.text_presets.get(sentiment.value, [])
-                    if preset_list:
-                        text = random.choice(preset_list)
+                preset_list = term.text_presets.get(sentiment.value, [])
+                if preset_list:
+                    text = random.choice(preset_list)
 
         selections.append(Selection(
             question_index=q.index,

@@ -55,15 +55,6 @@ class BehaviorConfig(BaseModel):
     confirm_before_submit: bool = True
 
 
-class AIConfig(BaseModel):
-    enabled: bool = False
-    provider: str = "claude"
-    model: str = "claude-haiku-4-5-20251001"
-    api_key_env: str = "ANTHROPIC_API_KEY"
-    base_url: str | None = None
-    opinionated: bool = False
-
-
 class SelectorsConfig(BaseModel):
     course_list_container: str = ""       # 空 = 自动检测
     question_container: str = ""          # 空 = 自动检测
@@ -83,7 +74,6 @@ class TermConfig(BaseModel):
     selectors: SelectorsConfig = SelectorsConfig()
     default_presets: DefaultPresetsConfig = DefaultPresetsConfig()
     behavior: BehaviorConfig = BehaviorConfig()
-    ai: AIConfig = AIConfig()
     courses: list[CourseConfig] = []
     text_presets: dict[str, list[str]] = {}
 

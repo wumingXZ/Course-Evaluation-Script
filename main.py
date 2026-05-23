@@ -40,7 +40,6 @@ def main():
   python main.py -2 --dry-run             # 全部一般，干跑预览
   python main.py -3 -y --headless         # 全部讨厌，无头自动提交
   python main.py --semester 2026-2027-1   # 指定学期
-  python main.py --ai                     # 启用 AI 模块
         """,
     )
     parser.add_argument("-1", dest="sentiment_like", action="store_true", help="全部课程使用「喜欢」情感")
@@ -50,8 +49,6 @@ def main():
     parser.add_argument("--semester", "-s", help="覆盖学期 (如 2026-2027-1)")
     parser.add_argument("--no-confirm", action="store_true", help="关闭保险模式，全自动运行")
     parser.add_argument("--confirm", action="store_true", help="强制开启保险模式")
-    parser.add_argument("--ai", action="store_true", help="启用 AI 模块")
-    parser.add_argument("--provider", help="AI provider (claude/openai)")
     parser.add_argument("--headless", action="store_true", help="无头模式运行浏览器")
     parser.add_argument("--dry-run", action="store_true", help="干跑模式：只打印选择，不填表不提交")
     parser.add_argument("--verbose", "-v", action="store_true", help="详细日志")
@@ -98,22 +95,6 @@ def main():
     print(f"[INFO] 保险模式: {'开启' if confirm_mode else '关闭（全自动）'}")
     if args.dry_run:
         print("[INFO] 干跑模式: 不会实际操作页面")
-
-    # Initialize AI writer if enabled
-    ai_writer = None
-    if args.ai or term.ai.enabled:
-        print("[INFO] 初始化 AI 模块...")
-        try:
-            from src.ai.writer import AIWriter
-
-            ai_config = term.ai
-            if args.provider:
-                ai_config.provider = args.provider
-            ai_writer = AIWriter(ai_config)
-            print(f"  [OK] AI 模块就绪 (provider={ai_config.provider}, model={ai_config.model})")
-        except Exception as e:
-            print(f"  [WARN] AI 模块初始化失败: {e}")
-            print("  [INFO] 已降级为固定预设模式")
 
     # Start browser
     print("[INFO] 启动浏览器...")
@@ -204,7 +185,7 @@ def main():
                     continue
 
                 # Generate selections
-                selections = generate_selections(questions, sentiment, presets, term, course_config, ai_writer)
+                selections = generate_selections(questions, sentiment, presets, term, course_config)
 
                 if args.verbose:
                     for sel in selections:
