@@ -32,7 +32,6 @@ class Question(BaseModel):
     was_reversed: bool = False  # True if JS normalization reversed option order
     # overrides from term.yaml
     skip: bool = False
-    force_option: int | None = None
 
 
 class Selection(BaseModel):

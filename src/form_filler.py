@@ -72,8 +72,6 @@ def fill_form(
                         fill_value = sel.text or fallback_text
                         if fill_value:
                             text_input.fill(fill_value)
-                            if not sel.text:
-                                print(f"  [INFO] 题目 {sel.question_index} 检测到条件文本输入，已填充默认文本")
                         else:
                             print(f"  [WARN] 题目 {sel.question_index} 发现文本输入框但无填充文本，"
                                   f"请手动填写或使用 --confirm 模式")
@@ -120,27 +118,6 @@ def fill_form(
                     target_cb.check()
             except Exception as e:
                 print(f"  [WARN] 勾选checkbox题目 {sel.question_index} 选项 {sel.option_index} 失败: {e}")
-
-
-def click_submit(page: Page) -> bool:
-    """Click the submit/save button on the evaluation form."""
-    submit_selectors = [
-        "button:has-text('提交')",
-        "button:has-text('保存')",
-        "[class*='submit']",
-        ".el-button--primary",
-        "button[type='submit']",
-    ]
-    for selector in submit_selectors:
-        try:
-            btn = page.locator(selector).first
-            if btn.is_visible():
-                btn.click()
-                time.sleep(3)
-                return True
-        except Exception:
-            continue
-    return False
 
 
 def _find_text_input_nearby(page: Page, radio_element: Locator) -> Locator | None:

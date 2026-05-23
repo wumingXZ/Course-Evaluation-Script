@@ -6,3 +6,4 @@ data/session_cache.json
 data/screenshots/
 .claude/
 src/kepin.egg-info/
+.DS_Store

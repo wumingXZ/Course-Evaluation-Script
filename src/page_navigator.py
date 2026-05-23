@@ -19,7 +19,7 @@ def navigate_to_tasks(page: Page, url: str, force: bool = False) -> None:
     except PwTimeout:
         # Vue SPA sometimes keeps websocket open, networkidle may never fire
         page.goto(url, wait_until="domcontentloaded", timeout=30000)
-    time.sleep(3)
+    time.sleep(1.5)
 
 
 def dismiss_modal(page: Page) -> bool:
@@ -57,27 +57,24 @@ def dismiss_modal(page: Page) -> bool:
     for selector in confirm_selectors:
         try:
             btn = page.locator(selector).first
-            if btn.count() > 0 and btn.is_visible():
+            if btn.is_visible():
                 btn.click()
-                time.sleep(0.5)
                 return True
         except Exception:
             continue
 
-    # Strategy 2: press Enter (often confirms default button in modals)
+    # Strategy 2: press Enter
     try:
         page.keyboard.press("Enter")
-        time.sleep(0.5)
-        modal_indicators = page.locator(".ant-modal-wrap, .ant-modal-mask, .el-dialog__wrapper, .el-message-box__wrapper").first
-        if modal_indicators.count() == 0 or not modal_indicators.is_visible():
-            return True
+        time.sleep(0.15)
+        return True
     except Exception:
         pass
 
     # Strategy 3: press Escape
     try:
         page.keyboard.press("Escape")
-        time.sleep(1)
+        time.sleep(0.15)
     except Exception:
         pass
 
@@ -281,7 +278,7 @@ def accept_copy_previous_evaluation(page: Page) -> bool:
 
     Returns True if the popup was found and accepted.
     """
-    time.sleep(0.5)
+    time.sleep(0.3)
     accept_selectors = [
         "button:has-text('使用前一位老师的评价')",
         "button:has-text('套用')",
@@ -301,7 +298,7 @@ def accept_copy_previous_evaluation(page: Page) -> bool:
             if btn.count() > 0 and btn.is_visible():
                 print(f"  已套用前一位老师的评价")
                 btn.click()
-                time.sleep(1)
+                time.sleep(0.3)
                 return True
         except Exception:
             continue
@@ -380,7 +377,7 @@ def handle_reason_popups(page: Page, sentiment_value: str) -> bool:
     if sentiment_value not in ("neutral", "dislike"):
         return False
 
-    time.sleep(2)
+    time.sleep(1)
     found_any = False
 
     # Check for modals with textareas or text inputs

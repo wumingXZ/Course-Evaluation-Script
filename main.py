@@ -174,19 +174,17 @@ def main():
                 errors.append(f"{course_name}: 无法进入评价页面")
                 continue
 
-            # Dismiss any popup/modal that appears after entering (common in multi-teacher courses)
-            time.sleep(1)
-            dismissed = dismiss_modal(page)
-            if dismissed:
+            # Dismiss any popup/modal that appears after entering
+            time.sleep(0.3)
+            if dismiss_modal(page):
                 print(f"  已关闭弹出提示框")
-                time.sleep(1)
 
             # Detect teacher tabs (multi-teacher courses)
             teacher_tabs = detect_teacher_tabs(page)
             if not teacher_tabs:
                 teacher_tabs = [course_name]  # Single teacher, use course name as label
 
-            course_completed = True
+            teacher_skipped = False
             for t_idx, teacher_name in enumerate(teacher_tabs):
                 if t_idx > 0:
                     print(f"\n  --- 切换至教师 [{t_idx+1}/{len(teacher_tabs)}]: {teacher_name} ---")
@@ -200,7 +198,7 @@ def main():
                     print(f"  教师 [{t_idx+1}/{len(teacher_tabs)}]: {teacher_name}")
 
                 # Detect questions for this teacher/sheet
-                questions = detect_questions(page, term)
+                questions = detect_questions(page, term, verbose=args.verbose)
                 if not questions:
                     print(f"  [WARN] {teacher_name}: 未检测到题目，跳过")
                     continue
@@ -222,6 +220,7 @@ def main():
                     selections = review_selections(review_label, questions, selections)
                     if selections is None:
                         print(f"  → 跳过 {review_label}")
+                        teacher_skipped = True
                         continue
 
                 # Dry run: just print
@@ -248,6 +247,13 @@ def main():
                 save_screenshot(page, screenshot_dir, f"pre_submit_{i:02d}_{course_name}_{t_idx}")
 
             # After all teachers, submit or close
+            if teacher_skipped:
+                print(f"  [WARN] 有教师被跳过，跳过提交 {course_name}")
+                errors.append(f"{course_name}: 部分教师未完成")
+                dismiss_modal(page)
+                navigate_to_tasks(page, evaluation_url, force=True)
+                continue
+
             if args.dry_run:
                 completed += 1
                 dismiss_modal(page)
