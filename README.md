@@ -5,11 +5,17 @@
 ## 安装
 
 ```bash
-pip install playwright
-playwright install chromium
 git clone https://github.com/wumingXZ/Course-Evaluation-Script.git
 cd Course-Evaluation-Script
+pip install -r requirements.txt
+playwright install chromium
 ```
+
+> 依赖包（`requirements.txt`）：playwright（浏览器自动化）、pydantic（配置校验）、pyyaml（YAML 解析）。Python 版本要求 ≥ 3.10。
+
+### 首次登录
+
+首次运行 `python main.py` 会打开浏览器窗口，手动完成 SSO 登录后关闭即可。登录态自动保存到 `data/storage_state.json`，后续无需再次登录。
 
 ## 配置
 
@@ -163,13 +169,6 @@ distributions:
             │
         提交评价 → [填写理由] → 下一门课
 ```
-
-## 首次使用
-
-1. 运行 `python main.py --dry-run` 预览，确认选项正确
-2. 正式运行 `python main.py`，首次会打开浏览器需要手动登录
-3. 登录后关闭浏览器，登录态自动保存到 `data/storage_state.json`
-4. 之后运行无需再次登录
 
 ## 自定义课程覆盖
 
