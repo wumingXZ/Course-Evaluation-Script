@@ -193,3 +193,30 @@ courses:
 - 正式运行保留默认的 `--confirm` 模式（保险模式），提交前可检查修改
 - 页面结构变化时可能需要调整 `config/term.yaml` 中的选择器
 - 文本预设模板在 `config/term.yaml` 的 `text_presets` 字段，可按需修改
+
+## 贡献 / 二次开发
+
+```bash
+# 1. Fork 本仓库（GitHub 页面右上角 Fork 按钮）
+
+# 2. 克隆你自己的 fork
+git clone https://github.com/你的用户名/Course-Evaluation-Script.git
+cd Course-Evaluation-Script
+
+# 3. 安装依赖
+pip install -r requirements.txt
+playwright install chromium
+
+# 4. 创建功能分支
+git checkout -b feat/my-feature
+
+# 5. 修改代码后提交
+git add .
+git commit -m "feat: 添加某个功能"
+
+# 6. 推送到自己的 fork
+git push origin feat/my-feature
+
+# 7. 在 GitHub 上发起 Pull Request
+```
+
