@@ -9,3 +9,5 @@ src/kepin.egg-info/
 .DS_Store
 .vscode/
 LEARNING_ROADMAP.md
+venv/
+node_modules/
