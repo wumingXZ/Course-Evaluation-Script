@@ -12,6 +12,12 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-*'   # 支持预发布标签如 v1.0.0-beta1
+  workflow_dispatch:                 # 允许手动触发
+    inputs:
+      version:
+        description: '版本号 (如 1.0.0，不含 v 前缀)'
+        required: true
+        default: '1.0.0'
 
 permissions:
   contents: write
