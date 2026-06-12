@@ -4,6 +4,8 @@
 
 [![Release](https://img.shields.io/github/v/release/wumingXZ/Course-Evaluation-Script?label=下载&color=blue)](https://github.com/wumingXZ/Course-Evaluation-Script/releases/latest)
 
+> ⚠️ **免责声明**：本项目仅用于学习浏览器自动化（Playwright）和 Python 工程实践。请勿用于违反校规或法律法规的行为。使用者自行承担一切后果。
+
 ## 📥 快速开始（推荐）
 
 1. 打开 [Releases](https://github.com/wumingXZ/Course-Evaluation-Script/releases/latest) 页面
