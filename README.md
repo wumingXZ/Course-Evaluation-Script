@@ -2,7 +2,21 @@
 
 复旦大学课程评估自动化工具，基于 Playwright 浏览器自动化。
 
-## 安装
+[![Release](https://img.shields.io/github/v/release/wumingXZ/Course-Evaluation-Script?label=下载&color=blue)](https://github.com/wumingXZ/Course-Evaluation-Script/releases/latest)
+
+## 📥 快速开始（推荐）
+
+1. 打开 [Releases](https://github.com/wumingXZ/Course-Evaluation-Script/releases/latest) 页面
+2. 下载对应系统的 zip：`-mac.zip` 或 `-windows.zip`
+3. 解压到任意目录，**双击启动脚本**：
+   - 🍎 macOS → `start.command`
+   - 🪟 Windows → `start.bat`
+4. 首次运行自动创建虚拟环境、安装依赖（2-5 分钟），之后即点即用
+5. 修改 `config/term.yaml` 中的 `semester` 字段即可切换学期
+
+> 启动后会通过**中文交互菜单**引导配置：评价策略、浏览器显隐、确认模式、干跑预览。也支持命令行参数透传（专家模式）。
+
+## 🔧 开发者安装（从源码运行）
 
 ```bash
 git clone https://github.com/wumingXZ/Course-Evaluation-Script.git
